@@ -1,0 +1,254 @@
+# 🚀 CI/CD Learning Guide — हिंदी में
+
+## Yeh guide kyun hai?
+Yeh project **CI/CD (Continuous Integration / Continuous Deployment)** sikhane ke liye hai.
+Aap **local Windows machine** pe isko run karke samajh sakte ho ki GitHub Actions kaise kaam karta hai.
+
+---
+
+## 📁 Step 1 — Project Structure Samjho
+
+```
+CICDLEARN/
+│
+├── server.js              ← Express server (Node.js)
+├── package.json           ← Project info & dependencies
+├── public/
+│   ├── index.html         ← Webpage (browser mein dikhega)
+│   └── 404.html           ← Error page
+├── tests/
+│   └── server.test.js     ← 5 tests hain jo server ko check karte hain
+└── .github/workflows/
+    └── demo.yml           ← YAHI HAI CI/CD PIPELINE!
+```
+
+**Yeh sab files GitHub pe push karni hain. Uske baad CI/CD apne aap chalegi.**
+
+---
+
+## ⚙️ Step 2 — GitHub Actions Kya Hai?
+
+**GitHub Actions** = Ek robot jo automatic kaam karta hai jab bhi aap code push karte ho.
+
+Jaise hi aap `git push` karte ho, GitHub ke server pe ek **virtual machine** start hota hai,
+jo aapki saari commands run karta hai — jaise `npm install`, `npm test`, etc.
+
+Is project mein, robot ye kaam karega:
+```
+1. Code download karega (checkout)
+2. Node.js setup karega
+3. npm install chalayega
+4. Tests chalayega
+5. Server start karega aur API check karega
+6. Success message dega
+```
+
+---
+
+## 📜 Step 3 — Pipeline File Samjho (demo.yml)
+
+`.github/workflows/demo.yml` file mein likha hai ki robot ko kya karna hai.
+
+Har line ka matlab:
+
+```yaml
+name: CI/CD Demo 🚀          # Pipeline ka naam
+
+on:                           # Kab trigger hogi?
+  push:
+    branches: [ main, master ]  # Jab bhi main branch pe push karo
+  pull_request:                  # Ya pull request banao
+  workflow_dispatch:             # Ya GitHub UI se manually trigger karo
+
+jobs:                         # Kaam ki list
+  test-and-build:              # Pehla kaam (job)
+    runs-on: ubuntu-latest     # Robot kis OS pe chalega? (Ubuntu Linux)
+
+    steps:                     # Har step ek command hai
+      - uses: actions/checkout@v4    # Code download karo
+      - uses: actions/setup-node@v4  # Node.js install karo
+      - run: npm install              # Dependencies install karo
+      - run: npm test                 # Tests chalao
+      - run: node server.js & ...     # Server chalao aur API check karo
+```
+
+**CI/CD Pipeline ka flow:**
+
+```
+PUSH karo → GitHub Actions trigger → Ubuntu VM start
+                                       ↓
+                              Code checkout (download)
+                                       ↓
+                              Node.js setup
+                                       ↓
+                              npm install (express)
+                                       ↓
+                              npm test (5 tests)
+                                       ↓
+                              Server start + curl check
+                                       ↓
+                              ✅ Success!
+```
+
+---
+
+## 🧪 Step 4 — Tests Kaise Kaam Karte Hain (server.test.js)
+
+Tests check karte hain ki server sahi se kaam kar raha hai ya nahi.
+
+```javascript
+// 5 tests hain:
+
+Test 1: GET /api/status → Server running hai ya nahi?
+Test 2: GET /api/hello?name=CI-CD → Name ke saath greeting?
+Test 3: GET /api/hello → Bina name ke "Guest" aata hai?
+Test 4: GET /api/calc/add?a=10&b=20 → 10+20=30?
+Test 5: GET / → Homepage HTML serve hoti hai?
+```
+
+Agar sab tests pass hue toh CI/CD pipeline **success** hogi.
+Agar koi test fail hua toh pipeline **fail** ho jayegi — aur aapko pata chal jayega ki kuch galat hai!
+
+**Yahi CI ka concept hai — Continuous Integration = Har push ke saath code test karo!**
+
+---
+
+## 💻 Step 5 — Locally Kaise Run Karein?
+
+Aap local Windows pe bhi same cheezein check kar sakte ho:
+
+```bash
+# Express install karo
+npm install
+
+# Server start karo
+npm start
+# → http://localhost:4500 pe server chalega
+
+# Tests chalao (dusre terminal mein)
+npm test
+# → 5 tests chalenge aur result dikhega
+```
+
+---
+
+## 🔄 Step 6 — GitHub Pe Push Kaise Karein?
+
+Jab aap CI/CD pipeline trigger karna chahte ho:
+
+```bash
+# 1. GitHub account banao (https://github.com)
+# 2. Naya repo banao (e.g., cicd-learn)
+
+# 3. Apne local project mein:
+git remote add origin https://github.com/TUMARA_NAAM/cicd-learn.git
+git add .
+git commit -m "CI/CD learning project"
+git push -u origin main
+
+# Bas! GitHub pe jaao → Actions tab → Pipeline chalti dikhegi!
+```
+
+---
+
+## 📊 Step 7 — Kya Hoga Jab Push Karoge?
+
+| Step | Kya Hota Hai | Status |
+|------|--------------|--------|
+| 1 | GitHub Actions trigger hota hai | 🔄 |
+| 2 | Ubuntu VM start hota hai | 🖥️ |
+| 3 | Code download hota hai | 📥 |
+| 4 | Node.js 18 setup hota hai | 🟢 |
+| 5 | `npm install` se Express install hota hai | 📦 |
+| 6 | `npm test` — 5 tests chalte hain | 🧪 |
+| 7 | Server start hota hai + curl se API check | 🚀 |
+| 8 | Sab sahi → **✅ Success!** | ✅ |
+
+Agar koi step fail hua → **❌ Red cross** dikhega GitHub Actions mein.
+Aap fix karo aur dobara push karo!
+
+---
+
+## 🎯 Real CI/CD Flow Diagram
+
+```
+YOU (Local PC)                  GITHUB.COM                      GITHUB ACTIONS (Cloud)
+      │                             │                                  │
+      │  git push main              │                                  │
+      │────────────────────────────>│                                  │
+      │                             │    Trigger workflow              │
+      │                             │─────────────────────────────────>│
+      │                             │                                  │
+      │                             │         Start Ubuntu VM          │
+      │                             │              │                   │
+      │                             │              ▼                   │
+      │                             │     actions/checkout@v4          │
+      │                             │     (code download)              │
+      │                             │              │                   │
+      │                             │              ▼                   │
+      │                             │     actions/setup-node@v4         │
+      │                             │     (Node.js 18)                 │
+      │                             │              │                   │
+      │                             │              ▼                   │
+      │                             │     npm install                  │
+      │                             │     (express install)            │
+      │                             │              │                   │
+      │                             │              ▼                   │
+      │                             │     npm test                     │
+      │                             │     (5 tests run)                │
+      │                             │              │                   │
+      │                             │         ┌────┴────┐             │
+      │                             │         │         │             │
+      │                             │       PASS ✅   FAIL ❌         │
+      │                             │         │         │             │
+      │                             │         ▼         ▼             │
+      │                             │   Server test   Fix &           │
+      │                             │   + curl check  Push again      │
+      │                             │         │                       │
+      │                             │         ▼                       │
+      │  GitHub Actions Result      │   ✅ CI/CD Success!             │
+      │<────────────────────────────│─────────────────────────────────│
+```
+
+---
+
+## 📝 Key Terms Yaad Rakho
+
+| Term | Matlab | Hindi |
+|------|--------|-------|
+| **CI** | Continuous Integration | Har push ke saath code test karo |
+| **CD** | Continuous Deployment | Test pass hone ke baad deploy karo |
+| **Pipeline** | Workflow | Steps ki ek sequence |
+| **Job** | Kaam | Ek unit of work |
+| **Step** | Kadam | Ek command |
+| **Runner** | Robot jo code run karta hai | GitHub ka VM |
+| **Push** | Code bhejna | Local se GitHub pe bhejna |
+| **Trigger** | Start hona | Kis condition pe pipeline chalegi |
+
+---
+
+## 🔥 Bonus: `act` Se Local Windows Pe Pipeline Run Karo
+
+GitHub Actions ko **bina GitHub pe push kiye** locally run kar sakte ho `act` se:
+
+```bash
+# act install karo (Windows PowerShell Admin)
+winget install nektos.act
+
+# Phir local run karo
+act -j test-and-build
+
+# Ye local VM mein utni hi commands chalayega jitni GitHub pe chalti!
+```
+
+---
+
+## ✅ Summary
+
+1. **Code likho** → `server.js` + `tests/server.test.js`
+2. **Pipeline define karo** → `.github/workflows/demo.yml`
+3. **Locally test karo** → `npm test`
+4. **GitHub pe push karo** → `git push origin main`
+5. **GitHub Actions apne aap sab karega** → Install → Test → Verify → Success!
+
+**Yahi CI/CD hai! 🚀**

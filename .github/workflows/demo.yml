@@ -1,0 +1,50 @@
+name: CI/CD Demo 🚀
+
+# 🔄 Kab trigger hoga?
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # GitHub UI se manually bhi trigger kar sakte ho
+
+# 🎯 Ye job chalegi
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Code ko GitHub se download karo
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Node.js setup karo (18 version)
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # 3️⃣ Dependencies install karo (express)
+      - name: 📦 Install dependencies
+        run: npm install
+
+      # 4️⃣ Tests chalao
+      - name: 🧪 Run tests
+        run: npm test
+
+      # 5️⃣ Server chalao aur check karo
+      - name: 🚀 Start server & test API
+        run: |
+          node server.js &
+          sleep 2
+          echo "--- Testing API ---"
+          curl http://localhost:4500/api/status
+          echo ""
+          curl http://localhost:4500/api/hello?name=CI-CD
+          echo ""
+          echo "✅ All API checks passed!"
+
+      # 6️⃣ Success
+      - name: ✅ Done
+        run: echo "🎉 CI/CD pipeline successfully completed!"

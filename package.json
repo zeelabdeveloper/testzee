@@ -1,0 +1,20 @@
+{
+  "name": "cicd-learn",
+  "version": "1.0.0",
+  "description": "🚀 Simple CI/CD learning project with Express server + GitHub Actions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/**.test.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  },
+  "keywords": [
+    "cicd",
+    "github-actions",
+    "express",
+    "learning"
+  ],
+  "license": "MIT"
+}

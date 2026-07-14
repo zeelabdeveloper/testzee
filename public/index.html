@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI/CD Learning 🚀</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 30px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .info-card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.2s, background 0.2s;
+      text-align: center;
+    }
+    .info-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.12);
+    }
+    .info-card .icon { font-size: 2rem; margin-bottom: 10px; }
+    .info-card h3 { font-size: 0.9rem; margin-bottom: 6px; }
+    .info-card p { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .endpoints { display: grid; gap: 10px; margin-bottom: 30px; }
+    .endpoint {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    .method {
+      padding: 3px 10px; border-radius: 6px;
+      font-weight: 700; font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    .method.get { background: #2d6a4f; color: #95d5b2; }
+    .path { color: rgba(255,255,255,0.8); }
+    .desc { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-left: auto; }
+    .footer {
+      text-align: center; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.85rem; color: rgba(255,255,255,0.3);
+    }
+    .status-dot {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; background: #52b788;
+      margin-right: 6px; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .terminal-box {
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px; padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem; margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #52b788;
+    }
+    .terminal-box .comment { color: rgba(255,255,255,0.3); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">
+      <span class="status-dot"></span>
+      Server Running ✅
+    </span>
+
+    <h1>🚀 CI/CD Learning</h1>
+    <p class="subtitle">GitHub Actions + Express server — Local Windows pe seekho!</p>
+
+    <div class="terminal-box">
+      <span class="comment"># Project structure 🗂️</span><br>
+      📁 CICDLEARN/<br>
+      ├── 📄 server.js              ← Express server (port 4500)<br>
+      ├── 📄 package.json           ← Dependencies & scripts<br>
+      ├── 📁 public/<br>
+      │   ├── index.html            ← Yeh page<br>
+      │   └── 404.html<br>
+      ├── 📁 tests/<br>
+      │   └── server.test.js        ← API tests 🧪<br>
+      └── 📁 .github/workflows/<br>
+          └── demo.yml              ← CI/CD pipeline 🔄
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="icon">📦</div>
+        <h3>Express</h3>
+        <p>Port ${4500} server</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">🧪</div>
+        <h3>5 Tests</h3>
+        <p>API integration tests</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">🔄</div>
+        <h3>GitHub Actions</h3>
+        <p>Auto CI/CD pipeline</p>
+      </div>
+      <div class="info-card">
+        <div class="icon">🪟</div>
+        <h3>Windows</h3>
+        <p>Local development</p>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5);">
+      📡 API Endpoints
+    </h3>
+
+    <div class="endpoints">
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/</span>
+        <span class="desc">Homepage</span>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/hello?name=test</span>
+        <span class="desc">Greeting API</span>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/status</span>
+        <span class="desc">Server health</span>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/calc/add?a=2&amp;b=3</span>
+        <span class="desc">Addition calculator</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <a href="#" onclick="fetchStatus()">🔍 Check Server Status</a> &bull;
+      <a href="#" onclick="runTest()">🧪 Run Test</a>
+      <br><br>
+      Made with ❤️ for learning CI/CD &bull; Express + GitHub Actions
+    </div>
+  </div>
+
+  <script>
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        alert(`✅ SERVER HEALTH\n\nStatus: ${data.status}\nUptime: ${data.uptime}\nNode: ${data.nodeVersion}\nPort: ${data.port}`);
+      } catch (e) {
+        alert('❌ Server not reachable!');
+      }
+    }
+    async function runTest() {
+      try {
+        const res = await fetch('/api/calc/add?a=10&b=20');
+        const data = await res.json();
+        alert(`🧪 TEST: 10 + 20 = ${data.result}\n✅ Calculator API working!`);
+      } catch (e) {
+        alert('❌ Test failed!');
+      }
+    }
+  </script>
+</body>
+</html>
