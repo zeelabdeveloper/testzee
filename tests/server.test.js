@@ -3,7 +3,7 @@ const assert = require('node:assert');
 console.log('Running server tests...');
 const TEST_PORT = 4501;
 let baseUrl, server;
-let server;
+ 
 before(async () => {
   // Server ko test port pe start karo
   process.env.PORT = String(TEST_PORT);
