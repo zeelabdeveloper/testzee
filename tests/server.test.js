@@ -3,11 +3,11 @@ const assert = require('node:assert');
 console.log('Running server tests...');
 const TEST_PORT = 4501;
 let baseUrl, server;
-
+let server;
 before(async () => {
   // Server ko test port pe start karo
   process.env.PORT = String(TEST_PORT);
-  const app = require('../server.js');
+  server = require('../server.js');
   baseUrl = `http://localhost:${TEST_PORT}`;
 
   // Wait for server to be ready
@@ -58,4 +58,11 @@ it('GET / → should serve HTML homepage', async () => {
   const res = await fetch(baseUrl);
   assert.strictEqual(res.status, 200);
   assert.ok(res.headers.get('content-type').includes('html'));
+});
+
+
+
+
+after(() => {
+  server?.close();
 });
