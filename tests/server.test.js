@@ -1,6 +1,6 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert');
-
+console.log('Running server tests...');
 const TEST_PORT = 4501;
 let baseUrl, server;
 
